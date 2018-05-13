@@ -12,7 +12,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 @RunWith(classOf[JUnitRunner])
 class TestFraudDetector extends FunSuite with BeforeAndAfterAll {
 
-  lazy val sut = new FraudDetector("/home/gatling77/dev/mldemo/mlpipeline/src/test/resources/sample_mlpnn.csv",Array("amount","lat","lon"))
+  lazy val sut = new FraudDetector("/home/gatling77/dev/mldemo/mlpipeline/src/test/resources/sample_mlpnn.csv",Array("amount","lat","lon"),1)
 
   test("SUT can be instantiated"){
     val instantiated = try {

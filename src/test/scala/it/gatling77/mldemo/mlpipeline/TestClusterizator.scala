@@ -25,13 +25,13 @@ class TestClusterizator extends FunSuite with BeforeAndAfterAll {
   }
 
     test("read user stats"){
-    val userStats = sut.readUserStats(sut.file)
+    val userStats = sut.readCSV(sut.file)
 
     assert(userStats.count()==3)
   }
 
   test("Calculate clusters"){
-    val userStats =sut.readUserStats(sut.file)
+    val userStats = sut.readCSV(sut.file)
     sut.calculateClusters(userStats)
   }
 }

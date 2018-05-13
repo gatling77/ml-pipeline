@@ -11,14 +11,14 @@ import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 
 object FraudDetector{
   def main(args: Array[String]): Unit = {
-    val fraudDetector = new FraudDetector("",Array[String]("amount","lat","lon"))
+    val fraudDetector = new FraudDetector("",Array[String]("amount","lat","lon"),1)
 
   }
 }
 /**
   * Created by gatling77 on 3/31/18.
   */
-class FraudDetector(val file: String, val features:Array[String]) {
+class FraudDetector(val file: String, val features:Array[String], val cluster: Int) {
 
   lazy val spark: SparkSession = SparkSession.builder.appName("mlpipeline").master("local").getOrCreate()
   import spark.implicits._
@@ -28,12 +28,12 @@ class FraudDetector(val file: String, val features:Array[String]) {
       spark.read.format("csv")
       .option("sep", ",")
       .option("inferSchema", "true")
-      .option("header", "true").load(file)
+      .option("header", "true").load(file).filter($"cluster"===cluster)
   }
 
 
 
-  private[mlpipeline] def train(transactions: DataFrame): PipelineModel = {
+  def train(transactions: DataFrame): PipelineModel = {
     // it's usually a good starting point to start with a single layer with two times the number of input.
     // please note that the output layer must be at lest 2, since the output uses OneHotEncoder
     val layers=Array[Int](features.length,features.length*2,2)
@@ -59,7 +59,8 @@ class FraudDetector(val file: String, val features:Array[String]) {
   }
 
 
-  private[mlpipeline] def evaluate(data: DataFrame, mlpnn: PipelineModel):DataFrame={
+
+  def evaluate(data: DataFrame, mlpnn: PipelineModel):DataFrame={
     mlpnn.transform(data)
   }
 

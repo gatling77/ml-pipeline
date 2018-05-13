@@ -26,32 +26,14 @@ class ClusterizedScatterPlot2D(title: String, data: DataFrame, x:String, y:Strin
   def json():String={
     plot.toJson
   }
-}
 
-object Scatter{
-  val file = "src/main/resources/large_dataset.csv"; //replace with arg
-  val txVsAmountImage = "target/txVsAmount.json";
-  val txVsGeoImage = "target/txVsGeo.json";
-  val clusterizator = new Clusterizator(file,3,20,Array("transactionsPerDay","averageAmount","geographicDispersion"))
-
-  def main(args: Array[String]): Unit ={
-    val data = clusterizator.calculateClusters()
-    val txVsAmount= new ClusterizedScatterPlot2D("test",data,"transactionsPerDay","averageAmount","cluster")
-    val txVsGeo= new ClusterizedScatterPlot2D("test",data,"transactionsPerDay","geographicDispersion","cluster")
-
-
-    writeToFile(txVsAmount,txVsAmountImage)
-    writeToFile(txVsGeo,txVsGeoImage)
-
-  }
-
-  def writeToFile(plot:ClusterizedScatterPlot2D, file:String): Unit ={
+  def writeToFile( file:String): Unit ={
     val image:PrintWriter = new PrintWriter(new File(file))
     try{
-      image.println(plot.json())
+      image.println(this.json())
     }finally{
       image.close()
     }
   }
-
 }
+
